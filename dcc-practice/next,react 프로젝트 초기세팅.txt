@@ -1,0 +1,19 @@
+https://sheldhe93.tistory.com/41 
+
+1. 프로젝트 생성
+> mkdir DCC_NEXTJS
+> cd DCC_NEXTJS
+> create-next-app dcc-practice
+> cd dcc-dcc_practice
+
+2. 각종 필요 라이브러리 설치
+
+3. pages디렉터리의 index.js 파일 생성 + "rsc"를 통해 세팅
+
+4. 서버 출력
+> yarn dev
+
+
+---------------
+* NextJS란
+: React 를 이용하여 Client Side Rendering (CSR) 와 Server Side Rendering (SSR) 를 쉽게 혼합 하여 빠른 성능 을 낼 수 있게 도와주는 프레임워크 (페이지 기반 빌드)
