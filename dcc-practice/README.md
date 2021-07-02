@@ -32,3 +32,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## 소스코드를 내려받아서 사용 시 주의사항
+용량 등의 문제를 방지하기 위해 .gitignore를 통해 node_modules 등을 제외하고 올린 상태이니, 
+바로 $ yarn build 하면 에러남
+- 향후 사용 시 git clone한 다음 $ npm install 해주면 package.json을 참조하여 필요한 package를 install 해줌
+- npm install 하여 필요 패키지 설치 후에 $ yarn build 했는데 "error Command failed with exit code 134." 이런 오류가 출력되면 해당 디렉터리에 "package_lock.json" 파일이 있는지 확인하여 삭제 후 재빌드하면 빌드 성공함
