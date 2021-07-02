@@ -7,13 +7,14 @@ https://sheldhe93.tistory.com/41
 > cd dcc-dcc_practice
 
 2. 각종 필요 라이브러리 설치
+> yarn add [설치할 라이브러리명]
 
 3. pages디렉터리의 index.js 파일 생성 + "rsc"를 통해 세팅
 
-4. 서버 출력
+4. 서버 출력  (빌드: yarn build)
 > yarn dev
 
 
 ---------------
 * NextJS란
-: React 를 이용하여 Client Side Rendering (CSR) 와 Server Side Rendering (SSR) 를 쉽게 혼합 하여 빠른 성능 을 낼 수 있게 도와주는 프레임워크 (페이지 기반 빌드)
+: React 를 이용하여 Client Side Rendering (CSR) 과 Server Side Rendering (SSR) 를 쉽게 혼합 하여 빠른 성능 을 낼 수 있게 도와주는 프레임워크 (페이지 기반 빌드)

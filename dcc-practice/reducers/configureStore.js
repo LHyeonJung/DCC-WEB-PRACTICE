@@ -5,6 +5,11 @@ next-redux-wrapper 6버전대 부터는 5버전과 사용방법이 많이 달라
 > next-redux-wrapper가 알아서 store를 실은 후 자동으로 감싸줌
 
 (6버전대에서 Provider를 사용한다거나 하면 legacy 경고가 날아옴)
+
+
+[redux로 관리해야하는 데이터]
+- 애플리케이션 여러 곳에서 공유되는 데이터
+- 다른 페이지를 갔다가 돌아왔을 때, 그 상태를 유지할 필요가 있는 데이터
  */
 
 import {createStore, applyMiddleware, compose } from 'redux';

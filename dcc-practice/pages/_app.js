@@ -1,9 +1,12 @@
 import '../styles/globals.css'
-
 import wrapper from '../reducers/configureStore';
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+   // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)
+
+  return (
+    <Component {...pageProps} />
+  )
 }
 
 export default wrapper.withRedux(MyApp);

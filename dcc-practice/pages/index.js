@@ -7,13 +7,12 @@ import DashboardComponent from '../components/DashboardComponent';
 import SideTab from '../components/SideTab';
 import EnrollCertification from '../components/EnrollCertification';
 
-
 import { Grid, Box, Button, Typography } from "@material-ui/core";
-
 
 // import {Container, Row, Col } from "react-bootstrap";
 
-
+import dll from "./api/dllImport";
+import hello from "./api/hello"
 // https://velopert.com/3293 사이트 보고 page 분리해보기
 // https://stackoverflow.com/questions/60482018/make-a-sidebar-from-react-bootstrap 
 
@@ -33,6 +32,13 @@ function index() {
     }, []);
 
      const [isExistCert, change_isExistCert] = useState(false);
+
+    function dllImportTest() 
+    {
+        //dll.importTest();
+        hello.importTest();
+    }
+
      if(isExistCert)
      {
         return (
@@ -56,6 +62,11 @@ function index() {
             <div>
                 <h5>[NextJs Redux 적용 테스트]</h5>
                 <a>카운트: {count}</a>
+
+                {/* <h5>[dllImport 테스트]</h5>
+                <button onClick={socketTest}>연결</button>
+                <br/> */}
+
                 <button onClick={onClickPlus}>+</button>
                 <button onClick={onClickMinus}>-</button>
                 <EnrollCertification />

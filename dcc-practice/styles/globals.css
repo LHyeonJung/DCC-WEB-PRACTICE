@@ -100,3 +100,15 @@ a {
     height: 100vh;
     background-color: wheat;
 }
+
+.RemoveButton{
+    cursor: pointer;
+    display: inline;
+    margin-left: 3%;
+    color: black;
+}
+
+.RemoveButton :hover{
+    opacity: 0.7;
+    color: gray;
+}
