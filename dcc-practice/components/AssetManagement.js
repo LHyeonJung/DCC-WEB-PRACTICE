@@ -2,6 +2,17 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {Record, List, Map} from 'immutable';
 import { useDispatch, useSelector } from 'react-redux';
 import {removeSaInfoAction} from '../reducers/sa';
+import styled from 'styled-components';
+
+import {
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+    TableFooter,
+    TablePagination,
+} from '@material-ui/core'
 
 const AssetManagement = ({assetList, onChange, password})=>{
     // 이것때문에 build에 실패하고 있었음 (들어오는 targetId값이 없음)
@@ -11,7 +22,33 @@ const AssetManagement = ({assetList, onChange, password})=>{
     // }, [targetId]);
 
     console.log("AssetManagement 렌더링");
-    
+
+    // 페이징 구현을 위한 상태관리 
+    //========
+    const [page, setPage] = useState(0) // 현재 페이지
+    const [rowsPerPage, setRowsPerPage] = useState(8) // 페이지 당 보여줄 열의 수
+    const [totalCount, setTotalCount] = useState(0);
+    var tempCnt = 0;
+
+    useEffect(() => {
+        assetList.forEach(element => {
+            tempCnt = tempCnt + 1;
+            setTotalCount(tempCnt);
+        });
+        return tempCnt;
+    }, [assetList]); //두번째 인자로 빈 배열을 넘기면 최초에만 실행되는 것, 빈값이 아니면 해당 값 업데이트 될때만 실행되는 것
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage)
+    }
+
+    const handleChangeRowsPerPage = (event) => {
+        console.log("??"+ event.target.value);
+        setRowsPerPage(parseInt(event.target.value, 8))
+        setPage(0)
+    }
+    //========
+
     // let [targetId, setTargetId] = useState('');
     const dispatch = useDispatch(); // dispatch를 쉽게 사용하게 하는 hook
 
@@ -40,37 +77,91 @@ const AssetManagement = ({assetList, onChange, password})=>{
             return false;
       }
 
-    const assetItems = assetList.map(
+    // const assetItems = assetList.map(
+    //     asset => {
+    //         const {saId, saIp, saPort, saOs, saGroup} = asset;
+    //         const tempInfo = asset;
+    //         return(
+    //             <li>
+    //                 <h5 style={{display:'inline'}}>
+    //                     {saId} | {saIp} | {saPort} | {saOs} | {saGroup} 
+
+    //                     {/* <div
+    //                         style={{display:'inline'}} 
+    //                         onClick={(e)=>{
+    //                         e.stopPropagation();
+    //                         setTargetId({saId});
+    //                         onRemove={onClickRemove}
+    //                     }}> &times; </div> */}
+
+    //                     <div className="RemoveButton" onClick={(e) => onClickRemove(e, {saId})}>X</div>
+    //                 </h5>
+    //             </li>
+    //         )
+
+    //     }
+    // )
+
+
+    // 테이블 만들기 예제 (https://ndb796.tistory.com/216)
+    // 테이블 페이징 예제 (https://www.daleseo.com/material-ui-tables/)
+    const assetItems = assetList.slice(page * rowsPerPage, (page+1) * rowsPerPage).map(
         asset => {
             const {saId, saIp, saPort, saOs, saGroup} = asset;
-            const tempInfo = asset;
             return(
-                <li>
-                    <h5 style={{display:'inline'}}>
-                        {saId} | {saIp} | {saPort} | {saOs} | {saGroup} 
-
-                        {/* <div
-                            style={{display:'inline'}} 
-                            onClick={(e)=>{
-                            e.stopPropagation();
-                            setTargetId({saId});
-                            onRemove={onClickRemove}
-                        }}> &times; </div> */}
-
-                        <div className="RemoveButton" onClick={(e) => onClickRemove(e, {saId})}>X</div>
-                    </h5>
-                </li>
+                <TableRow>
+                    <TableCell>{saId}</TableCell>
+                    <TableCell>{saIp}</TableCell>
+                    <TableCell>{saPort}</TableCell>
+                    <TableCell>{saOs}</TableCell>
+                    <TableCell>{saGroup}</TableCell>
+                    <TableCell><button className="RemoveButton" onClick={(e) => onClickRemove(e, {saId})}>delete</button></TableCell>
+                </TableRow>
             )
 
         }
     )
 
+    const TableContainer = styled.div` max-height : 600px; height : 100%; overflow-y:auto; `; // https://r-0o0-j.tistory.com/155
+    
     return (
         <div>
-            <h4> L I S T </h4>
+            {/*
             <ul>
                 { assetItems }
-            </ul>
+            </ul> */}
+
+            <h4>서버 목록 조회 </h4>
+            <TableContainer>
+                <Table stickyHeader>
+                    <TableHead className="tableHead">
+                        <TableRow>
+                            <TableCell>아이디</TableCell>
+                            <TableCell>IP</TableCell>
+                            <TableCell>PORT</TableCell>
+                            <TableCell>OS</TableCell>
+                            <TableCell>GROUP</TableCell>
+                            <TableCell>삭제</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody className="tableBody">
+                        { assetItems }
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                count={totalCount}
+                                page={page}
+                                rowsPerPage={rowsPerPage}
+                                rowsPerPageOptions = {[]}
+                                onChangePage={handleChangePage}
+                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </TableContainer>
+
         </div>
     );
 };

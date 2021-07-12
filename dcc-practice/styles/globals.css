@@ -3,6 +3,8 @@ body {
   padding: 0;
   margin: 0;
   font-family: "NotoSans_Medium"; 
+  overflow-x: hidden; 
+  overflow-y: auto;
 }
 
 @font-face {
@@ -279,4 +281,14 @@ div (menu-box)
     width: 370px;
     height: 300px;
     overflow: auto;
+}
+
+.tableHead{
+    background: lightgray;
+    color: black;
+}
+
+.tableBody{
+    background: white;
+    color: gray;
 }
