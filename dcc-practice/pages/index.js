@@ -6,6 +6,7 @@ import Header from '../components/public/Header';
 import DashboardComponent from '../components/DashboardComponent';
 import SideTab from '../components/SideTab';
 import EnrollCertification from '../components/EnrollCertification';
+import Login from '../components/Login';
 
 import { Grid, Box, Button, Typography } from "@material-ui/core";
 
@@ -60,15 +61,22 @@ function index() {
         console.log("isExistCert false! ");
         return (
             <div>
-                <h5>[NextJs Redux 적용 테스트]</h5>
+                <h6> [## NextJs Redux 적용 테스트] </h6>
                 <a>카운트: {count}</a>
+                <button onClick={onClickPlus}>+</button>
+                <button onClick={onClickMinus}>-</button>
 
+                <h6> ======================================================================================= </h6>
                 {/* <h5>[dllImport 테스트]</h5>
                 <button onClick={socketTest}>연결</button>
                 <br/> */}
 
-                <button onClick={onClickPlus}>+</button>
-                <button onClick={onClickMinus}>-</button>
+                <h6> [## 로그인 테스트] </h6>
+                <Login/>
+
+                <h6> ======================================================================================= </h6>
+                
+                <h6> [## 파일 가져오기 및 데이터 GET/SET 테스트] </h6>
                 <EnrollCertification />
             </div>
         );

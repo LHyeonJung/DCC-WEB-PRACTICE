@@ -2,8 +2,16 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "NotoSans_Medium"; 
+}
+
+@font-face {
+    font-family: "NotoSans_Medium";       
+    src: url("../font/NotoSansCJKkr-Medium.ttf");
+}
+@font-face {
+    font-family: "NotoSans_Regular";       
+    src: url("../font/NotoSansCJKkr-Regular.ttf");
 }
 
 a {
@@ -65,11 +73,11 @@ a {
 }
 
 .Grid_Menu{
-    background-color: aliceblue;
+    background-color: rgb(218, 218, 218);
 }
 
 .Grid_Default{
-    background-color: antiquewhite;
+    background-color: rgb(148, 147, 145);
 }
 
 .Grid_Group{
@@ -105,10 +113,170 @@ a {
     cursor: pointer;
     display: inline;
     margin-left: 3%;
-    color: black;
+    color: grey;
 }
 
-.RemoveButton :hover{
+.RemoveButton:hover{
     opacity: 0.7;
-    color: gray;
+    color: red;
+}
+
+.DefaultTextInput{
+    width: 200px;
+    height: 30px;
+    display: block;
+    font-size: 13px;
+    margin: 10px;
+}
+
+.DefaultButton{
+    cursor: pointer;
+    display: block;
+    margin: 10px;
+    color: white;
+    font-size: 15px;
+    background-color: slateblue;
+    border-radius: 8px;
+    width: 200px;
+    height: 40px;
+}
+
+.DefaultButton:hover{
+    background-color:mediumpurple;
+}
+
+ul{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+/*
+div (menu-box)
+    ul (menu) [ 대 메뉴 묶음 ]
+	li + a  [ 대 메뉴 ]
+	     ul (sub)  [ 소 메뉴 묶음 ]
+                         li  + a [ 소 메뉴 ]
+*/
+.menu-box{
+    /* position: fixed;  */
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    justify-items: flex-start;
+    align-items: flex-start;
+}
+
+.menu{
+    display: flex;
+    flex-direction: row;
+}
+
+.menu>li{
+    position: relative;
+    flex-basis: 20%;
+    line-height: 50px;
+    text-align: center;
+}
+
+.menu li a{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* .menu>li>a::after{ ==> 특정 element뒤에 붙여서 사용함
+    content: " ∨";
+} */
+
+.menu>li>:hover{
+    background: white;
+    border-radius: 30px;
+    cursor: default;
+}
+
+.menu>li:hover a{
+    /* background: #ccc; */
+}
+
+.menu>li:hover .sub{
+    display:block;
+    border-top: 2px solid rgb(52, 53, 131);
+    border-radius: 0px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-top: 5px;
+    background: white;
+    /* background: red; */
+    /* border: 1px solid black; */
+    /* width: max-content; */
+    
+}
+
+.sub{
+    position: absolute;
+    top: 50px;
+    width: 170%;
+    display: none;
+    box-sizing:inherit;
+    box-shadow: 0 0.1rem 0.8rem 0.05rem;
+}
+
+.sub li{
+    background: white;
+    position: relative;
+    left: -20px;
+    width: 100%;
+    line-height: 50px;
+    text-align: left;
+}
+
+/* 자식 element 중 마지막에 해당하는 element 제외하고 적용 :not(~) */
+.sub li:not(:last-child){
+    border-bottom: 0.5px solid grey;
+}
+
+.sub li:hover{
+    background: rgb(35, 35, 102);
+    color: white;
+}
+
+/* 푸시 알림 */
+.push-bell
+{
+    z-index: 1;
+    position:relative;
+    width: 30px;
+    height: 30px;
+    left: 20px;
+    top: 10px;
+    /* margin-top: 40px;
+    margin-left: 20px; */
+}
+
+.push-bell:hover{
+    background: white;
+    border-radius: 20px;
+}
+
+.redCircle{
+    position:relative;
+    z-index: 2;
+    background: red;
+    width: 15px;
+    height: 15px;
+    border-radius: 50px;
+    left: 35px;
+    top: 25px;
+    font-size: 13px;
+}
+
+.tooltip{
+    opacity: 10%;
+    width: 370px;
+    height: 300px;
+    overflow: auto;
 }

@@ -20,7 +20,7 @@ const REMOVE_SAINFO = "sa/REMOVE_SAINFO" // 사용자 제거
 // 액션 생성 함수
 export const changeSaInfoAction = createAction(CHANGE_SAINFO, value => value);
 export const addSaInfoAction = createAction(ADD_SAINFO, value => value);
-export const removeSaInfoAction = createAction(REMOVE_SAINFO, id=>id, pwd=>pwd);
+export const removeSaInfoAction = createAction(REMOVE_SAINFO, id=>id);
 
 // 모듈 초기값 설정
 const initialState = Record({
@@ -51,16 +51,6 @@ const saInfoRecord = Record({
     saGroup: ''
 })
 
-function IsValidKey(pwd){
-    // 키 검증 로직
-
-    // 임시로직
-    if(pwd === 'Qaeldkah9./') 
-        return true;
-    else 
-        return false;
-  }
-
 // 리듀서 
 export default handleActions(
     {
@@ -73,17 +63,9 @@ export default handleActions(
             console.log("[ADD_SAINFO]-{inputvalue}: ", inputvalue);
             return state.update('saList', saInfo => saInfo.push(inputvalue));
         },
-        [REMOVE_SAINFO]: (state, {payload:id}, {meta:pwd})=>{
-            const isValidKey = IsValidKey(pwd);
-            if(isValidKey)
-            {
-                const index = state.get('saList').findIndex(item=>item.get('saId')===id);
-                return state.deleteIn(['saList', index]);
-            }
-            else
-            {
-                console.log('비밀번호 검증 실패');
-            }
+        [REMOVE_SAINFO]: (state, {payload:id})=>{
+            const index = state.get('saList').findIndex(item=>item.saId===id);
+            return state.deleteIn(['saList', index]);
         },
     }, initialState
 );

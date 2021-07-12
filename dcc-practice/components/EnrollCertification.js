@@ -4,7 +4,6 @@ import { useDispatch, useSelector, shallowEqual  } from 'react-redux';
 // import {setCertPathAction, setKeyPathAction, setSitePathAction, setCertPwAction, getCertPathAction, getKeyPathAction, getSitePathAction, getCertPwAction} from '../reducers/defaultAsset';
 import {setCertPathAction, setKeyPathAction, setSitePathAction, setCertPwAction} from '../reducers/defaultAsset';
 import DragAndDrop from './public/DragAndDrop';
-import { Map } from 'immutable';
 
 // 참고 [https://www.nicesnippets.com/blog/react-js-file-upload-example-with-axios]
 function EnrollCertification() {
@@ -55,10 +54,10 @@ function EnrollCertification() {
         console.log("[1Get cert_Pw]   "+ cert_Pw);
     },[]);
 
-    const onSubmitButtonClick = useCallback(()=> {
+    function onSubmitButtonClick () {
         console.log("[onSubmitButtonClick]");
 
-        if(cert_Path.length != 0 && key_Path.length != 0 && site_Path.length != 0  && cert_Pw.length != 0)
+        if(cert_Path.length > 0 && key_Path.length > 0 && site_Path.length > 0  && cert_Pw.length > 0)
         {
             console.log("모두 입력됨");
             console.log(cert_Path);
@@ -74,7 +73,7 @@ function EnrollCertification() {
             alert('3개 인증서 경로 및 인증서 비밀번호를 모두 입력해야함');
         }
 
-    });
+    };
 
     // 키 검증 로직 필요 *
 
@@ -113,10 +112,10 @@ function EnrollCertification() {
                 {/* <input type="file" className="form-control" name="upload_file" style={{display:"block"}} onChange={e=>onCertPathSubmitClick(e.target.files[0])} /> */}
                 <input type="file" className="form-control" name="upload_file" style={{display:"block"}} onChange={onCertPathChanged} accept=".cer" />
 
-                <li style={{marginTop:"10px"}}>(*) 사이트 인증서</li>
+                <li style={{marginTop:"10px"}}>(*) DCC 키</li>
                 <input type="file" className="form-control" name="upload_file" style={{display:"block"}}  onChange={onKeyPathChanged} accept=".key"/>
 
-                <li style={{marginTop:"10px"}}>(*) DCC 키</li>
+                <li style={{marginTop:"10px"}}>(*) 사이트 인증서</li>
                 <input type="file" className="form-control" name="upload_file" style={{display:"block"}} onChange={onSitePathChanged} accept=".cer"/>
 
                 <li style={{marginTop:"10px"}}>(*) 인증서 비밀번호</li>

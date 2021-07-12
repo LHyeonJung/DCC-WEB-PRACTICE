@@ -12,6 +12,9 @@ const SET_KEY_PATH = "defaultAsset/SET_KEY_PATH"; // SET 관리도구 키 경로
 const SET_SITE_PATH = "defaultAsset/SET_SITE_PATH" // SET 사이트 인증서 경로
 const SET_CERT_PW = "defaultAsset/SET_CERT_PW" // SET 사이트 인증서 경로
 
+const SET_ID = "defaultAsset/SET_ID";
+const SET_PW = "defaultAsset/SET_PW";
+
 
 // 액션 생성 함수
 // export const getCertPathAction = createAction(GET_CERT_PATH);
@@ -24,12 +27,17 @@ export const setKeyPathAction = createAction(SET_KEY_PATH, value => value);
 export const setSitePathAction = createAction(SET_SITE_PATH, value => value);
 export const setCertPwAction = createAction(SET_CERT_PW, value => value);
 
+export const setIdAction = createAction(SET_ID, value => value);
+export const setPwAction = createAction(SET_PW, value => value);
+
 // 모듈 초기 상태
 const initialState = Map({ 
     certPath: '',
     keyPath: '',
     sitePath: '',
-    certPw:''
+    certPw:'',
+    id:'',
+    pw: ''
 });
 
 // 값들이 LIST,MAP,Record 등이 아니라면 state.set를 못씀 => Map으로 변경
@@ -56,7 +64,18 @@ export default handleActions(
         [SET_CERT_PW]: (state, {payload:inputCertPw}) => { 
             console.log("(handleActions)SET_CERT_PW: ",inputCertPw);
             return state.set('certPw', inputCertPw );
+        },
+
+        [SET_ID]: (state, {payload:inputId}) => { 
+            console.log("(handleActions)SET_ID: ",inputId);
+            return state.set('id', inputId );
+        },
+
+        [SET_PW]: (state, {payload:inputPw}) => { 
+            console.log("(handleActions)SET_PW: ",inputPw);
+            return state.set('pw', inputPw );
         }
+
 
         // [GET_CERT_PATH]: (state) => {
         //     const certPath = state.get('certPath');

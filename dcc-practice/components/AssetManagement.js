@@ -3,18 +3,7 @@ import {Record, List, Map} from 'immutable';
 import { useDispatch, useSelector } from 'react-redux';
 import {removeSaInfoAction} from '../reducers/sa';
 
-const AssetItem = ({saId, saIp, saPort, saOs, saGroup, onRemove}) => {
-    // <li onClick={()=> onChange(saId)} onRemove={()=>onRemove(saId)}>
-    //     {saId}
-    // </li>
-    <li on>
-        <h4>
-            {saId} {saIp} {saPort} {saOs} {saGroup}
-        </h4>
-    </li>
-}
-
-const AssetManagement = ({assetList, onChange, onRemove, password})=>{
+const AssetManagement = ({assetList, onChange, password})=>{
     // 이것때문에 build에 실패하고 있었음 (들어오는 targetId값이 없음)
     // useEffect(()=>
     // {
@@ -22,14 +11,34 @@ const AssetManagement = ({assetList, onChange, onRemove, password})=>{
     // }, [targetId]);
 
     console.log("AssetManagement 렌더링");
-    // console.log("assetList", assetList);
     
-    let [targetId, setTargetId] = useState('');
+    // let [targetId, setTargetId] = useState('');
     const dispatch = useDispatch(); // dispatch를 쉽게 사용하게 하는 hook
 
-    const onClickRemove = useCallback(()=> {
-        dispatch(removeSaInfoAction(targetId, password));
+    const onClickRemove = useCallback((e, id)=> {
+        // 클릭 시, 비밀번호 입력 팝업 출력되도록 해야함
+        e.stopPropagation();
+        
+        console.log("targetId: "+ id);
+        console.log("userPw: "+ password);
+
+        if(IsValidKey(password)){
+            dispatch(removeSaInfoAction(id));
+        }
+        else{
+            alert("사용자 비밀번호가 일치하지 않습니다.");
+        }
     }, []);
+
+    function IsValidKey(pwd){
+        // 키 검증 로직
+    
+        // 임시로직
+        if(pwd === 'Qaeldkah9./') 
+            return true;
+        else 
+            return false;
+      }
 
     const assetItems = assetList.map(
         asset => {
@@ -38,25 +47,19 @@ const AssetManagement = ({assetList, onChange, onRemove, password})=>{
             return(
                 <li>
                     <h5 style={{display:'inline'}}>
-                        {saId} {saIp} {saPort} {saOs} {saGroup} 
+                        {saId} | {saIp} | {saPort} | {saOs} | {saGroup} 
 
-                        <div
+                        {/* <div
                             style={{display:'inline'}} 
                             onClick={(e)=>{
                             e.stopPropagation();
                             setTargetId({saId});
                             onRemove={onClickRemove}
-                        }}> &times; </div>
+                        }}> &times; </div> */}
+
+                        <div className="RemoveButton" onClick={(e) => onClickRemove(e, {saId})}>X</div>
                     </h5>
                 </li>
-                // <AssetItem
-                //     saId = {saId}
-                //     saIp = {saIp}
-                //     saPort = {saPort}
-                //     saOs = {saOs}
-                //     saGroup = {saGroup}
-                //     key={saId}
-                // />
             )
 
         }
