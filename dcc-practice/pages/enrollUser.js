@@ -1,10 +1,10 @@
+import React from 'react';
 import Header from '../components/public/Header';
-import { Grid, Box, Button, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import SideTab from '../components/SideTab';
-import SettingComponent from '../components/SettingComponent';
+import EnrollUserComponent from '../components/EnrollUserComponent';
 
-const Setting = (props) => {
-    console.log("Setting 렌더링");
+const EnrollUser = () => {
     return (
         <div>
             <Header/>
@@ -13,11 +13,11 @@ const Setting = (props) => {
                     <SideTab/>
                 </Grid>
                 <Grid item xs={12} sm={8} style={{background: 'beige', color:'black'}}>
-                    <SettingComponent name={props.name}/>
+                    <EnrollUserComponent/>
                 </Grid>
             </Grid>
         </div>
     );
 };
 
-export default Setting;
+export default EnrollUser;

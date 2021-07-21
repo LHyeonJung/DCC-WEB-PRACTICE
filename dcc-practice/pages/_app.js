@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import wrapper from '../reducers/configureStore';
+import React, {useState, useEffect} from 'react';
 
 function MyApp({ Component, pageProps }) {
    // useState를 사용하여 open상태를 변경한다. (open일때 true로 만들어 열리는 방식)

@@ -2,7 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "NotoSans_Medium"; 
+  font-family: "NotoSans_Regular"; 
   overflow-x: hidden; 
   overflow-y: auto;
 }
@@ -80,6 +80,10 @@ a {
 
 .Grid_Default{
     background-color: rgb(148, 147, 145);
+}
+
+.Grid_User{
+    background-color: white;
 }
 
 .Grid_Group{
@@ -284,11 +288,28 @@ div (menu-box)
 }
 
 .tableHead{
+    margin: 3%;
     background: lightgray;
     color: black;
+    text-align: center;
+    font-size: 15px;
+    width: 45rem;
 }
 
 .tableBody{
     background: white;
     color: gray;
+    font-size: 15px;
+}
+
+.componentTitle{
+    margin-left: 20px;
+    font-size: 18px;
+    color: rgb(5, 5, 49);
+}
+
+.componentDesc{
+    font-size: 15px;
+    color: rgb(111, 111, 114);
+    margin-left: 2%;
 }

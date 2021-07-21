@@ -1,10 +1,12 @@
+import React from 'react';
 import Header from '../components/public/Header';
-import { Grid, Box, Button, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import SideTab from '../components/SideTab';
-import SettingComponent from '../components/SettingComponent';
+import UserListComponent from '../components/UserListComponent';
 
-const Setting = (props) => {
-    console.log("Setting 렌더링");
+// https://blog.daum.net/junek69/72
+
+const UserList = () => {
     return (
         <div>
             <Header/>
@@ -13,11 +15,11 @@ const Setting = (props) => {
                     <SideTab/>
                 </Grid>
                 <Grid item xs={12} sm={8} style={{background: 'beige', color:'black'}}>
-                    <SettingComponent name={props.name}/>
+                    <UserListComponent/>
                 </Grid>
             </Grid>
         </div>
     );
 };
 
-export default Setting;
+export default UserList;

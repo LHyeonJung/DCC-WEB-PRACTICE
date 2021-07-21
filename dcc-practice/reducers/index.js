@@ -3,8 +3,9 @@
 import { combineReducers } from 'redux';
 import count from './count';
 import sa from './sa';
+import user from './user';
 import defaultAsset from './defaultAsset';
 
-const rootReducer = combineReducers({ count, sa, defaultAsset });
+const rootReducer = combineReducers({ count, sa, defaultAsset, user });
 
 export default rootReducer;

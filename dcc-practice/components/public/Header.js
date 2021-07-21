@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { Grid, Box, Button, Typography } from "@material-ui/core";
 import logo from '../../images/Light/Light_logo_m.png';
@@ -6,6 +7,7 @@ import SideTab from '../SideTab';
 import {AiOutlineDown, AiOutlineBell} from "react-icons/ai";
 import CreateMenu from './Menu.js';
 import ReactTooltip from 'react-tooltip';
+import axios from 'axios';
 
 // const linkStyle = {
 //     marginRight: '1rem'
@@ -51,6 +53,24 @@ function Header () {
     },
     [pushList]);
 
+    //////
+    // const dispatch = useDispatch(); // dispatch를 쉽게 사용하게 하는 hook
+    const userList = useSelector(state => state.user.userList); // store의 state.saList를 불러오는 hook 
+    // useEffect(() => {
+    //     _dbGetTest();
+    // }, []); 
+    
+    // const _dbGetTest = async() => {
+    //     //const res = await axios.get('http://localhost:4000/get_test_table');
+    //     const res = await axios.get('http://localhost:4000/get_user_table');
+    //     console.log(res.data)
+    //     res.data.forEach(element => {
+    //         //setsqlData(id=element.id, pass=element.pass);
+    //     });
+    // }
+
+    //////
+
     console.log("Header 렌더링");
     return (
         <div>
@@ -91,15 +111,15 @@ function Header () {
                             </li>
 
                             {/* <li><a>설정</a> */}
-                            <li><a>설정 <AiOutlineDown style={{paddingTop: "11px", fontSize:"21px"}}/></a>
+                            <li><a href="/setting">설정 <AiOutlineDown style={{paddingTop: "11px", fontSize:"21px"}}/></a>
                                 <ul className="sub">
                                     <li><a href="/setting">설정 템플릿 생성</a></li>
                                     <li><a href="/setting">설정 템플릿 조회</a></li>
                                     <li><a href="/setting">DCC 기본 설정</a></li>
                                     <li><a href="/setting">백업 설정</a></li>
                                     <li><a href="/setting">연동 설정</a></li>
-                                    <li><a href="/setting">사용자 등록</a></li>
-                                    <li><a href="/setting">사용자 조회</a></li>
+                                    <li><a href="/enrollUser">사용자 등록</a></li>
+                                    <li><a href="/userList">사용자 조회</a></li>
                                     <li><a href="/setting">유지보수 코드 관리</a></li>
                                     <li><a href="/setting">UI 설정</a></li>
                                 </ul>
@@ -137,7 +157,7 @@ function Header () {
                         </Link>
                     </Button> */}
                 </Grid>
-                <Grid item xs={12} sm={3} className="Grid_Default">
+                <Grid item xs={12} sm={1} className="Grid_Default">
                     <div>
                         <div className="redCircle">{pushCount}</div>
                         <AiOutlineBell data-tip data-for="tooltip" className="push-bell"/>
@@ -155,6 +175,17 @@ function Header () {
                                  )}
                             </div>
                         </ReactTooltip>
+                    </div>
+                </Grid>
+
+                {/* https://ddeck.tistory.com/30 */}
+                <Grid item xs={12} sm={2} className="Grid_User">  
+                    <div>
+                        <h4>{}</h4>
+                        {/* <h2>user정보!</h2>
+                        <h3>아이디 입력</h3>
+                        <input name="text" onChange={handlChangeText}></input>
+                        <button onClick={onclickSaveDb}>전송</button> */}
                     </div>
                 </Grid>
                 {/* <Grid item xs={12} sm={4} >

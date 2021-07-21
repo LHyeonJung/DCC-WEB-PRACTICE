@@ -1,6 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {countPlusAction, countMinusAction} from '../reducers/count';
+import {addUserAction, initUserAction} from '../reducers/user';
+import axios from 'axios';
 
 import Header from '../components/public/Header';
 import DashboardComponent from '../components/DashboardComponent';
@@ -23,6 +25,23 @@ function index() {
     const dispatch = useDispatch(); // dispatch를 쉽게 사용하게 하는 hook
     const count = useSelector(state => state.count.number); // store의 state.count.number를 불러오는 hook (store의 state중에서 count의 state를 불러올 코드)
     
+    //////
+    // useEffect(() => {
+    //     console.log("index init!!");
+    //     _getUser();
+    // }, []); 
+    
+    // const _getUser = useCallback(async() => {
+    //     //const res = await axios.get('http://localhost:4000/get_test_table');
+    //     const res = await axios.get('http://localhost:4000/get_user_table');
+    //     console.log(res.data)
+    //     dispatch(initUserAction());
+    //     res.data.forEach(element => {
+    //         dispatch(addUserAction(element));
+    //     });
+    // },[]);
+    //////
+
     // useCallback은 최적화를 위한 hook 
     const onClickPlus = useCallback(()=> {
         dispatch(countPlusAction());
