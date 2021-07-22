@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "server": "nodemon server/server.js",
-    "test": "concurrently \"nodemon server/server.js\" \"next dev\""
+    "test": "concurrently \"nodemon server/server.js\" \"next dev\"",
+    "deploy": "concurrently \"nodemon server/server.js\" \"next dev\""
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
