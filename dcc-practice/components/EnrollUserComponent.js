@@ -33,6 +33,26 @@ const EnrollUserComponent = () => {
     // })
     const resettingRef = useRef(false); // 데이터를 동기식으로 사용하기 위함 (useState자체는 비동기식으로 운영되기 때문에 바로 업데이트 되지 않음 - 함수형 컴포넌트에서는 일반적으로 동기식 데이터를 useState로 관리하지 않음)
 
+    const initialState = {
+        id: null,
+        pass: null,
+        isSuperUser: null,
+        name: null,
+        isSecurityAgent: null,
+        role: null,
+        isOTP: null,
+        isignOTPShared: null,
+        Explanation: null,
+        mail: null,
+        phone: null,
+        department: null,
+        rank: null,
+        isDuplicateLogin: null,
+        serverGroupAccessibility: null,
+        menuAccessibility: null,
+        info: null,
+      };
+
     const [inputInfoAll, setInputInfoAll]= useState({
         id: null,
         pass: null,
@@ -147,6 +167,9 @@ const EnrollUserComponent = () => {
     const dataUpdate = useCallback(()=> {
         InsertUser(inputInfoAll);
         dispatch(addUserAction(inputInfoAll));
+
+        setInputInfoAll({...initialState});
+        alert("사용자 등록 완료");
     }, [inputInfoAll]);
 
 
@@ -167,38 +190,38 @@ const EnrollUserComponent = () => {
             <a className="componentDesc">DCC에 사용자를 등록합니다.</a>
 
             <Grid container spacing={1} style={{margin:"20px"}}>
-                <Grid item xs={10} sm={2}>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey"}} >ID*</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>비밀번호*</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>비밀번호 확인*</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>사용자명*</a>
+                <Grid item xs={11} sm={2} >
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey"}} >ID*</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>비밀번호*</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>비밀번호 확인*</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>사용자명*</a>
                     {/* <a style={{display:"block", width:"100px", height:"30px", background:"lightGrey", marginTop:"5px"}}>계정 상태*</a> */}
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>사용자 타입*</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>mOTP*</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>중복 로그인*</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>설명</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>이메일*</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>휴대폰*</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>부서</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>직급</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>서버 그룹 접근 권한</a>
-                    <a style={{display:"block", width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>메뉴 접근 권한</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>사용자 타입*</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>mOTP*</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>중복 로그인*</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>설명</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>이메일*</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>휴대폰*</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>부서</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>직급</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>서버 그룹 접근 권한</a>
+                    <a style={{display:"block", float:"right",width:"140px", height:"30px", background:"lightGrey", marginTop:"5px"}}>메뉴 접근 권한</a>
                 </Grid>
-                <Grid item xs={10} sm={8} >
-                    <input type="text" name="id" onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px",}} placeholder="5~20자의 영문 소문자, 숫자와 특수기호(_),(-)"/>
-                    <input type="text" name="pass"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="8~16자 영문 대 소문자, 숫자, 특수문자 사용"/>
-                    <input type="text" name="passCheckValue"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="비밀번호와 동일하게 입력하세요"/>
-                    <input type="text" name="name" style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="사용자명을 입력하세요(40자 이하)"/>
-                    <input type="text" name="isSuperUser"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="계정 상태 입력(관리자/일반 사용자)"/>
-                    <input type="text" name="isOTP"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="사용 여부 입력(사용/미사용)"/>
-                    <input type="text" name="isDuplicateLogin"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="허용 여부 선택"/>
-                    <input type="text" name="Explanation"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="설명"/>
-                    <input type="text" name="mail"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="이메일을 입력"/>
-                    <input type="text" name="phone"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="휴대폰 번호 입력"/>
-                    <input type="text" name="department"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="부서를 입력하세요(40자 이하)"/>
-                    <input type="text" name="rank"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="직급을 입력하세요(40자 이하)"/>
-                    <input type="text" name="serverGroupAccessibility"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="선택"/>
-                    <input type="text" name="menuAccessibility"  onChange={onChangeInput} style={{marginLeft:"10px", width:"350px", height:"30px", marginTop:"5px"}} placeholder="선택"/>
+                <Grid item xs={11} sm={5} >
+                    <input type="text" name="id" onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px",}} placeholder="5~20자의 영문 소문자, 숫자와 특수기호(_),(-)"/>
+                    <input type="text" name="pass"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="8~16자 영문 대 소문자, 숫자, 특수문자 사용"/>
+                    <input type="text" name="passCheckValue"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="비밀번호와 동일하게 입력하세요"/>
+                    <input type="text" name="name" style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="사용자명을 입력하세요(40자 이하)"/>
+                    <input type="text" name="isSuperUser"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="계정 상태 입력(관리자/일반 사용자)"/>
+                    <input type="text" name="isOTP"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="사용 여부 입력(사용/미사용)"/>
+                    <input type="text" name="isDuplicateLogin"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="허용 여부 선택"/>
+                    <input type="text" name="Explanation"  onChange={onChangeInput} style={{display:"block",  width:"350px", height:"30px", marginTop:"5px"}} placeholder="설명"/>
+                    <input type="text" name="mail"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="이메일을 입력"/>
+                    <input type="text" name="phone"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="휴대폰 번호 입력"/>
+                    <input type="text" name="department"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="부서를 입력하세요(40자 이하)"/>
+                    <input type="text" name="rank"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="직급을 입력하세요(40자 이하)"/>
+                    <input type="text" name="serverGroupAccessibility"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="선택"/>
+                    <input type="text" name="menuAccessibility"  onChange={onChangeInput} style={{display:"block", width:"350px", height:"30px", marginTop:"5px"}} placeholder="선택"/>
 
                     {/* <Autocomplete 
                         id="combo-box-demo"
