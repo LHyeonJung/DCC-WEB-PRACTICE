@@ -24,7 +24,7 @@ const UserListComponent = () => {
         column: null,
         direction: null,
         sidx: 0,
-        maxRows: 8,
+        maxRows: 20,
     })
 
     const [searchInput, setSearchInput] = useState("");
@@ -38,7 +38,7 @@ const UserListComponent = () => {
     }, []);
 
     const [page, setPage] = useState(0) // 현재 페이지
-    const [rowsPerPage, setRowsPerPage] = useState(8) // 페이지 당 보여줄 열의 수
+    const [rowsPerPage, setRowsPerPage] = useState(20) // 페이지 당 보여줄 열의 수
     const [totalCount, setTotalCount] = useState(0);
     var tempCnt = 0;
 

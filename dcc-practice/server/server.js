@@ -49,8 +49,10 @@ app.post('/insert_user', (req, res) => {
     db.query(sql,params,function(err,rows,fields) {
         if(err){
             console.log("insert err - "+err);
+            // res.send(err);
         }else{
             console.log("insert succeed - "+rows.insertId); // rows.insertId 는 db에 입력될때 생성되는 auto_increment 값을 알아낼수 있다.
+            // res.send(data);
         }
     })
 })
