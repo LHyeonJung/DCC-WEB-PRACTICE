@@ -45,13 +45,29 @@ app.get('/get_user_table', (req, res) => {
 app.post('/insert_user', (req, res) => {
     var sql = 'INSERT INTO user (id, pass, isSuperUser, isSecurityAgent, role, isOTP,isignOTPShared, info) VALUES(?,?,?,?,?,?,?,?)';
     var params = req.body.data;
-
+    console.log("params: "+ params);
     db.query(sql,params,function(err,rows,fields) {
         if(err){
             console.log("insert err - "+err);
             // res.send(err);
         }else{
             console.log("insert succeed - "+rows.insertId); // rows.insertId 는 db에 입력될때 생성되는 auto_increment 값을 알아낼수 있다.
+            // res.send(data);
+        }
+    })
+})
+
+//EX) DELETE FROM `dcc-web-schema`.`user` WHERE (`id` = '55');
+app.post('/delete_user', (req, res) => {
+    var sql = 'DELETE FROM user WHERE(id = (?))';
+    var params = req.body.data;
+    console.log("params: "+ params);
+    db.query(sql,params,function(err,rows,fields) {
+        if(err){
+            console.log("delete err - "+err);
+            // res.send(err);
+        }else{
+            console.log("delete succeed - "+rows.insertId); // rows.insertId 는 db에 입력될때 생성되는 auto_increment 값을 알아낼수 있다.
             // res.send(data);
         }
     })

@@ -1,9 +1,9 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {initUserAction, addUserAction, removeUserAction} from '../reducers/user';
 
 import {IoIosRefresh, IoMdRefresh} from "react-icons/io";
-import {BsPencil} from "react-icons/bs";
+import {BsFillChatSquareDotsFill, BsPencil} from "react-icons/bs";
 import {GiMagnifyingGlass} from "react-icons/gi";
 
 import Header from '../components/public/Header';
@@ -12,11 +12,22 @@ import SideTab from '../components/SideTab';
 
 import _ from 'lodash'; // // 모듈화, 성능 및 기타 기능을 제공하는 자바스크립트 유틸리티 라이브러리
 import axios from 'axios';
-import {Label, Input, Table, Menu, Icon, Divider} from 'semantic-ui-react';
+import {Label, Input, Table, Menu, Icon, Divider, StatisticValue} from 'semantic-ui-react';
 // import 'semantic-ui-css/semantic.min.css';
 import { List } from '@material-ui/core';
 
 const UserListComponent = () => {
+   
+    // // [컴포넌트 최적화]  컴포넌트가 리렌더링 할지말지 정해줌 ** 
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return this.props.todos !== nextProps.todos; // 업데이트 조건을 return (여기선 todo 리스트가 바뀔때 리렌더링 필요)
+    // }
+
+    const resettingRef = useRef(false); // 데이터를 동기식으로 사용하기 위함 (useState자체는 비동기식으로 운영되기 때문에 바로 업데이트 되지 않음 - 함수형 컴포넌트에서는 일반적으로 동기식 데이터를 useState로 관리하지 않음)
+
+    const dispatch = useDispatch(); // dispatch를 쉽게 사용하게 하는 hook
+    const userList = useSelector(state => state.user.userList); 
+
     const [status, setStatus] = useState({
         assets: [],
         filtered: [],
@@ -27,41 +38,37 @@ const UserListComponent = () => {
         maxRows: 20,
     })
 
-    const [searchInput, setSearchInput] = useState("");
-
-    const dispatch = useDispatch(); // dispatch를 쉽게 사용하게 하는 hook
-    const userList = useSelector(state => state.user.userList); 
-
-    const onClickRemove = useCallback((id)=> {
-        // 공용 팝업 만든 후, 정말 삭제하시겠습니까? 추가*
-        dispatch(removeUserAction(id));
-    }, []);
+    const [isAllChecked, setIsAllChecked] = useState(false);
+    const [isCheckedItems, setIsChekedItems] = useState([]);//([{targetId: '', isChecked: false}]);
 
     const [page, setPage] = useState(0) // 현재 페이지
     const [rowsPerPage, setRowsPerPage] = useState(20) // 페이지 당 보여줄 열의 수
     const [totalCount, setTotalCount] = useState(0);
+
+    const [searchKeword, setSearchKeword] = useState('');
     var tempCnt = 0;
-
-    // useEffect(() => {
-    //     setStatus({
-    //         ...status,
-    //         filtered: userList,
-    //         asset: userList,
-    //         sidx: 0
-    //     });
-
-    //     userList.forEach(element => {
-    //         tempCnt = tempCnt + 1;
-    //         setTotalCount(tempCnt);
-    //     });
-    //     return tempCnt;
-    // }, [userList, status]); //두번째 인자로 빈 배열을 넘기면 최초에만 실행되는 것, 빈값이 아니면 해당 값 업데이트 될때만 실행되는 것
 
     //////
     useEffect(() => {
         console.log("index init!!");
         _getUser();
-    }, []); 
+    }, []);
+
+    useEffect(() => {
+        console.log("reduxUserList -- useEffect");
+        if (resettingRef.current) {
+            console.log("get db");
+            resettingRef.current = false;
+            _getUser();
+        }
+    }, [resettingRef.current]);
+
+    // useEffect(() => {
+    //     console.log("isCheckedItems 변경");
+    //     // isCheckedItems.forEach(element => {
+    //     //     console.log("* "+ element.targetId + "/"+ element.isChecked);
+    //     // });
+    // }, [isCheckedItems]);
     
     const _getUser = useCallback(async() => {
         const res = await axios.get('http://localhost:4000/get_user_table');
@@ -70,17 +77,33 @@ const UserListComponent = () => {
         dispatch(initUserAction());
 
         res.data.forEach(element => {
-
             dispatch(addUserAction(element));
         });
 
+        console.log("1111111111");
+        setIsChekedItems([]);
+        res.data.forEach(element => {
+            setIsChekedItems(isCheckedItems => [...isCheckedItems, {targetId: element.id, isChecked:false}]);
+            // setIsChekedItems(isCheckedItems.concat({targetId:element.id, ischecked:false}));
+        });
+
+        // setStatus({
+        //     ...status,
+        //     filtered: res.data,
+        //     assets: res.data,
+        //     sidx: 0,
+        // });
+
         setStatus({
-            ...status,
             filtered: res.data,
             assets: res.data,
-            sidx: 0
+            sidx: 0,
+            column: null,
+            direction: null,
+            sidx: 0,
+            maxRows: 30,
         });
-    },[]);
+    },[isCheckedItems, status]);
     //////
 
     const handleChangePage = (event, newPage) => {
@@ -115,18 +138,17 @@ const UserListComponent = () => {
         });
     }
 
-    const onClickRefresh = useCallback((e)=> {
+    const onClickRefresh = (e)=> {
         e.stopPropagation();
 
         console.log("test1");
         _getUser();
+        setSearchKeword('');
         console.log("test2");
-    }, []);
+    };
 
     const onSearchChange = useCallback((e) => {
-
-        setSearchInput(e.target.value);
-
+        setSearchKeword(e.target.value);
         const {sidx, assets, filtered, filter, column, direction, maxRows} = status;
         console.log("check: "+sidx, assets, filtered, filter, column, direction, maxRows);
         const intMaxRows = parseInt(maxRows);
@@ -151,34 +173,105 @@ const UserListComponent = () => {
             filter: e.target.value,
             sidx: 0
         });
-                        
-
     });
 
 
-    // const userItems = userList.slice(page * rowsPerPage, (page+1) * rowsPerPage).map(
-    //     user => {
-    //         const {id, pass, isSuperUser, isSecurityAgent, role, isOTP, isignOTPShared, info} = user;
-    //         console.log("id: "+id);
-    //         return(
-    //             <Table.Row key={id}>
-    //                 <Table.Cell>{id}</Table.Cell>
-    //                 <Table.Cell>{isSuperUser=="true" ? "관리자" : "일반 사용자"}</Table.Cell>
-    //                 <Table.Cell>{isSecurityAgent=="true" ? "보안관리자" : "-"}</Table.Cell>
-    //                 <Table.Cell>{role}</Table.Cell>
-    //                 <Table.Cell>{isOTP=="true" ? "사용" : "사용안함" }</Table.Cell>
-    //                 <Table.Cell><BsPencil  onClick={(e) => onClickModify(e, {id})}  style={{cursor:"pointer"}}/></Table.Cell>
-    //                 <Table.Cell><GiMagnifyingGlass style={{cursor:"pointer"}} onClick={(e) => onClickDetail(e, {id})}/></Table.Cell>
-    //             </Table.Row>
-    //         )
-    //     }
-    // )
+    const onClickAllChecked = useCallback((isChecked)=> {
+        // e.stopPropagation();
+
+        console.log("allChecked --- "+ isChecked);
+        if(!isChecked){
+            console.log("전체 선택");
+            setIsAllChecked(true);
+
+            console.log("222222222");
+            setIsChekedItems([]);
+            status.filtered.forEach(element => {
+                setIsChekedItems(isCheckedItems => [...isCheckedItems, {targetId: element.id, isChecked:true}]);
+            });
+        }
+        else{
+            console.log("전체 선택 해제");
+            setIsAllChecked(false);
+            console.log("333333333");
+            setIsChekedItems([]);
+            status.filtered.forEach(element => {
+                setIsChekedItems(isCheckedItems => [...isCheckedItems, {targetId: element.id, isChecked:false}]);
+            });
+        }
+        console.log("전체: "+ isCheckedItems);
+    },[isCheckedItems, status]);
+
+    const onClickChecked = useCallback((e, isCheckedList, id)=> {
+        e.stopPropagation();
+
+        console.log("이벤트 대상 id: "+ id);
+        const checkedItemIndex = isCheckedList.findIndex(x => x.targetId===id);
+        var ischecked = false;
+        if(checkedItemIndex<0){ // 항목 없음 (이런경우는 없어야 함 - 예외처리)
+            console.log("배열에 해당 id 없음" + checkedItemIndex);
+        }
+        else{
+            console.log("배열에 해당 id 있음");
+
+            ischecked = isCheckedList[checkedItemIndex].isChecked;
+            console.log("체크여부: "+ ischecked);
+
+            // 배열중에 해당 id를 가진 항목만 isChecked를 반대로 수정
+            console.log("5555555555");
+            setIsChekedItems(
+                isCheckedList.map(item =>
+                  item.targetId === id ? { targetId:item.targetId, isChecked: !ischecked} : item
+                )
+              );
+  
+        }
+    },[isCheckedItems]);
+
+    const DeleteUser =useCallback((e)=> { 
+
+        var temp = isCheckedItems.filter((x) => x.isChecked === true)
+        console.log("제거 대상 개수: "+ temp.length);
+        if(temp.length>0){
+            temp.forEach(async(element) => {
+                if(element.isChecked == true){
+                    console.log("제거 targetID--: "+ element.targetId);
+                    const res = await axios('http://localhost:4000/delete_user', {
+                    method: 'POST',
+                    data: {'data': element.targetId},
+                    headers: new Headers()
+                    })
+                    dispatch(removeUserAction(element.targetId));
+                }
+            });
+            // _getUser(); // 데이터를 세팅한뒤 값이 바로 반영 안됨
+
+            // (temp).forEach(element => {
+            //     setIsChekedItems(isCheckedItems.filter(item => item.targetId !== element.targetId));
+            // });
+            
+            resettingRef.current = true; 
+         }
+
+         else{
+             alert("제거 대상이 없습니다.");
+         }
+    }, [isCheckedItems, status]);
 
     const userItems = status.filtered.slice(page * rowsPerPage, (page+1) * rowsPerPage).map(
         user => {
             const {id, pass, isSuperUser, isSecurityAgent, role, isOTP, isignOTPShared, info} = user;
+            const checkedItemIndex = isCheckedItems.findIndex(x => x.targetId===id);
+            var ischecked = false;
+            if(checkedItemIndex<0){
+                ischecked = false;
+            }
+            else{
+                ischecked = isCheckedItems[checkedItemIndex].isChecked;
+            }
             return(
                 <Table.Row key={id}>
+                    <Table.Cell><input type="checkbox" checked={ischecked} onChange={e=>onClickChecked(e, isCheckedItems, id)}></input></Table.Cell>
                     <Table.Cell>{id}</Table.Cell>
                     <Table.Cell>{isSuperUser=="true" ? "관리자" : "일반 사용자"}</Table.Cell>
                     <Table.Cell>{isSecurityAgent=="true" ? "보안관리자" : "-"}</Table.Cell>
@@ -195,19 +288,19 @@ const UserListComponent = () => {
         <div>
             <a className="componentTitle">사용자 조회</a>
             <a className="componentDesc">DCC에 등록된 사용자를 조회합니다.</a>
-            {/* <button onclick={(e)=> onClickRefresh(e)}>
-                 <IoMdRefresh style={{ marginTop:"20px", marginRight:"40px", display: "inline-block", float:"right", cursor:"pointer"}} />
-            </button> 이벤트를 안탐 */}
-            <div onclick={onClickRefresh} style={{ marginTop:"20px", marginRight:"20px", display: "inline-block", float:"right", cursor:"pointer"}}>
+            <button onClick={(e) => onClickRefresh(e)} style={{ marginTop:"20px", marginRight:"20px", display: "inline-block", float:"right", cursor:"pointer"}}>
                  <IoMdRefresh />
-            </div>
+            </button>
 
-            <Input icon='search' actionPosition='right'  style={{marginLeft: "20px", marginTop:"10px"}} placeholder='검색 대상 ID 키워드 입력' onChange={onSearchChange}/>
+            <Input icon='search' actionPosition='right'  style={{marginLeft: "20px", marginTop:"10px"}} placeholder='검색 대상 ID 키워드 입력' value={searchKeword} onChange={onSearchChange}/>
             <Label as='a' />
+
+            <button style={{width:"50px", display:"block", marginRight:"20px", float:"right"}} onClick={(e) => DeleteUser(e)}>제거</button>
 
             <Table className="tableHead" sortable celled fixed unstackable>
                 <Table.Header>
                     <Table.Row>
+                        <Table.HeaderCell ><input name="headerCheckbox" type="checkbox" checked={isAllChecked} onChange={(e)=> onClickAllChecked(isAllChecked)}></input> </Table.HeaderCell>
                         <Table.HeaderCell sorted={status.column==='id' ? status.direction : null} onClick={handleSort('id')} style={{cursor:"pointer"}} >ID</Table.HeaderCell>
                         <Table.HeaderCell sorted={status.column==='isSuperUser' ? status.direction : null} onClick={handleSort('isSuperUser')} style={{cursor:"pointer"}}>관리자 여부</Table.HeaderCell>
                         <Table.HeaderCell sorted={status.column==='isSecurityAgent' ? status.direction : null} onClick={handleSort('isSecurityAgent')} style={{cursor:"pointer"}}>보안관리자 여부</Table.HeaderCell>
@@ -235,6 +328,14 @@ const UserListComponent = () => {
 
         </div>
     );
-};
+}
+// , (prevProps, nextProps) => {
+//     //return nextProps.status.assets === prevProps.status.assets;
+// };
 
-export default UserListComponent;
+// export default UserListComponent;//React.memo(UserListComponent, (prevProps, nextProps) => this.prevProps.status.assets == nextProps.status.assets);//UserListComponent;//React.memo(UserListComponent, areEqual);
+export default React.memo(
+    UserListComponent,
+    (prevProps, nextProps) => prevProps.status.assets === nextProps.status.assets // false 반환 시, 리렌더링
+);
+// export default UserListComponent;
