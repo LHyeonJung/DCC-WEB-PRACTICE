@@ -15,45 +15,6 @@ const EnrollUserComponent = () => {
 
     const resettingRef = useRef(false); // 데이터를 동기식으로 사용하기 위함 (useState자체는 비동기식으로 운영되기 때문에 바로 업데이트 되지 않음 - 함수형 컴포넌트에서는 일반적으로 동기식 데이터를 useState로 관리하지 않음)
 
-    const initialStateInputInfo = {
-        id: "",
-        pass: "",
-        isSuperUser: "",
-        userName: "",
-        isSecurityAgent: "",
-        role: "",
-        isOTP: "",
-        isignOTPShared: "",
-        Explanation: "",
-        mail: "",
-        phone: "",
-        department: "",
-        rank: "",
-        isDuplicateLogin: "",
-        serverGroupAccessibility: "",
-        menuAccessibility: "",
-        info:""
-      };
-
-    //   const initialUserInfoAll = {
-    //     id: "",
-    //     pass: "",
-    //     isSuperUser: "false",
-    //     userName: "",
-    //     isSecurityAgent: "false",
-    //     role: null,
-    //     isOTP: "false",
-    //     isignOTPShared: "false",
-    //     Explanation: "",
-    //     mail: "",
-    //     phone: "",
-    //     department: "",
-    //     rank: "",
-    //     isDuplicateLogin: "false",
-    //     serverGroupAccessibility: "",
-    //     menuAccessibility: "",
-    //     info: "",
-    //   };
     const initialUserInfoAll = {
         id: "",
         pass: "",
@@ -76,7 +37,6 @@ const EnrollUserComponent = () => {
 
       // https://developer.mozilla.org/ko/docs/Learn/JavaScript/Objects/JSON
  
-    const [inputInfoAll, setInputInfoAll]= useState(initialStateInputInfo); // 사용자 등록 시 입력값
     const [userInfoAll, setUserInfoAll]= useState(initialUserInfoAll); // DB에 등록할 user 정보
     const [passCheckValue, setPassCheckValue] = useState("");
 
@@ -92,38 +52,6 @@ const EnrollUserComponent = () => {
         }
 
         else{
-            // setInputInfoAll({
-            //     ...inputInfoAll,
-            //     [name]: value
-            // });
-
-            // if(name === "isSuperUser"){
-            //     setUserInfoAll({
-            //         ...userInfoAll,
-            //         isSuperUser: value==="관리자"? "true": "false"
-            //     });
-            // }
-    
-            // else if(name === "isOTP"){
-            //     setUserInfoAll({
-            //         ...userInfoAll,
-            //         isOTP: value==="사용"? "true": "false"
-            //     });
-            // }
-    
-            // else if(name === "isDuplicateLogin"){
-            //     setUserInfoAll({
-            //         ...userInfoAll,
-            //         isDuplicateLogin: value==="허용"? "true": "false"
-            //     });
-            // }
-            // else{
-            //     setUserInfoAll({
-            //         ...userInfoAll,
-            //         [name]: value
-            //     });
-            // }
-
             setUserInfoAll({
                 ...userInfoAll,
                 [name]: value
@@ -187,12 +115,19 @@ const EnrollUserComponent = () => {
             setUserInfoAll({
                  ...userInfoAll,
                  isSuperUser: userInfoAll.isSuperUser==="관리자"? "true": "false",
-                 isSecurityAgent: userInfoAll.isSecurityAgent===""? "false": "true",
+                 isSecurityAgent: userInfoAll.isSuperUser==="관리자"? "true": "false",
                  isOTP: userInfoAll.isOTP==="사용"? "true": "false",
                  isDuplicateLogin: userInfoAll.isDuplicateLogin==="허용"? "true": "false",
                  isignOTPShared: userInfoAll.isignOTPShared===""? "false": userInfoAll.isignOTPShared,
              });
 
+             /*
+             위에까지 해둔 후, info에 넣을 json 데이터 만들면 이전 userInfoAll을 사용해서 갱신되지 않은채로 info 데이터가 만들어짐 
+                => useEffect로 순서대로 실행되도록 함 
+                    1) 등록 버튼 클릭 시, 선택값 enum값으로 치환 2
+                    2) userInfoAll 데이터가 변경됐고, resettingRef.current가 true면 json데이터 생성해서 info에 삽입
+                    3) userInfoAll.info 데이터가 변경됐으면 DB, redux store의 state에 추가
+              */
              resettingRef.current = true; 
         }
     }
@@ -201,7 +136,6 @@ const EnrollUserComponent = () => {
         InsertUser(userInfoAll);
 
         // 입력 데이터 초기화
-        setInputInfoAll({...initialStateInputInfo}); 
         setUserInfoAll({...initialUserInfoAll}); 
         setPassCheckValue("");
         alert("사용자 등록 완료");

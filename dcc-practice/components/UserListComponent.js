@@ -68,7 +68,29 @@ const UserListComponent = () => {
     //     // isCheckedItems.forEach(element => {
     //     //     console.log("* "+ element.targetId + "/"+ element.isChecked);
     //     // });
-    // }, [isCheckedItems]);
+
+    //     var userListTemp = [...status.assets];
+    //     // status.assets.info 데이터 예시:  {"user_info": {"list": ["{\"id\":\"USER3\",\"pass\":\"qhdks./\",\"isSuperUser\":\"false\",\"userName\":\"hyeonjung4\",\"isSecurityAgent\":\"false\",\"role\":null,\"isOTP\":\"false\",\"isignOTPShared\":\"false\",\"Explanation\":\"~~\",\"mail\":\"\",\"phone\":\"1234\",\"department\":\"\",\"rank\":\"\",\"isDuplicateLogin\":\"true\",\"serverGroupAccessibility\":\"\",\"menuAccessibility\":\"\",\"info\":\"\"}"]}}
+    //     userListTemp.forEach(element => {
+    //         var temp = JSON.parse(element.info);
+    //         for(var key in temp){
+    //             var user_info = temp[key];
+    //             for(var info in user_info){
+    //                 console.log("key: "+ info + "/ "+ user_info[info]);
+    //                 element.info = JSON.parse(user_info[info]);
+    //             }
+    //         }
+    //         // element.info = JSON.parse(element.info);
+    //     });
+
+    //     setStatus({
+    //         ...status,
+    //         filtered: userListTemp,
+    //         assets: userListTemp,
+    //     });
+        
+    //     //JSON.parse(jsonData);
+    // }, [status.assets]);
     
     const _getUser = useCallback(async() => {
         const res = await axios.get('http://localhost:4000/get_user_table');
@@ -87,22 +109,27 @@ const UserListComponent = () => {
             // setIsChekedItems(isCheckedItems.concat({targetId:element.id, ischecked:false}));
         });
 
-        // setStatus({
-        //     ...status,
-        //     filtered: res.data,
-        //     assets: res.data,
-        //     sidx: 0,
-        // });
+        var userListTemp = [...res.data];
+        // status.assets.info 데이터 예시:  {"user_info": {"list": ["{\"id\":\"USER3\",\"pass\":\"qhdks./\",\"isSuperUser\":\"false\",\"userName\":\"hyeonjung4\",\"isSecurityAgent\":\"false\",\"role\":null,\"isOTP\":\"false\",\"isignOTPShared\":\"false\",\"Explanation\":\"~~\",\"mail\":\"\",\"phone\":\"1234\",\"department\":\"\",\"rank\":\"\",\"isDuplicateLogin\":\"true\",\"serverGroupAccessibility\":\"\",\"menuAccessibility\":\"\",\"info\":\"\"}"]}}
+        userListTemp.forEach(element => {
+            var temp = JSON.parse(element.info);
+            for(var key in temp){
+                var user_info = temp[key];
+                for(var info in user_info){
+                    // console.log("key: "+ info + "/ "+ user_info[info]);
+                    element.info = JSON.parse(user_info[info]);
+                }
+            }
+            // element.info = JSON.parse(element.info);
+        });
 
         setStatus({
-            filtered: res.data,
-            assets: res.data,
+            ...status,
+            filtered: userListTemp,
+            assets: userListTemp,
             sidx: 0,
-            column: null,
-            direction: null,
-            sidx: 0,
-            maxRows: 30,
         });
+
     },[isCheckedItems, status]);
     //////
 
@@ -141,10 +168,9 @@ const UserListComponent = () => {
     const onClickRefresh = (e)=> {
         e.stopPropagation();
 
-        console.log("test1");
+        console.log("_getUser");
         _getUser();
         setSearchKeword('');
-        console.log("test2");
     };
 
     const onSearchChange = useCallback((e) => {
@@ -269,14 +295,16 @@ const UserListComponent = () => {
             else{
                 ischecked = isCheckedItems[checkedItemIndex].isChecked;
             }
+
             return(
                 <Table.Row key={id}>
                     <Table.Cell><input type="checkbox" checked={ischecked} onChange={e=>onClickChecked(e, isCheckedItems, id)}></input></Table.Cell>
                     <Table.Cell>{id}</Table.Cell>
-                    <Table.Cell>{isSuperUser=="true" ? "관리자" : "일반 사용자"}</Table.Cell>
-                    <Table.Cell>{isSecurityAgent=="true" ? "보안관리자" : "-"}</Table.Cell>
+                    <Table.Cell>{isSuperUser==="true" ? "관리자" : "일반 사용자"}</Table.Cell>
+                    <Table.Cell>{isSecurityAgent==="true" ? "보안관리자" : "-"}</Table.Cell>
                     <Table.Cell>{role}</Table.Cell>
                     <Table.Cell>{isOTP=="true" ? "사용" : "사용안함" }</Table.Cell>
+                    <Table.Cell>{info.isDuplicateLogin==="true"? "허용": "금지"}</Table.Cell>
                     <Table.Cell><BsPencil  onClick={(e) => onClickModify(e, {id})}  style={{cursor:"pointer"}}/></Table.Cell>
                     <Table.Cell><GiMagnifyingGlass style={{cursor:"pointer"}} onClick={(e) => onClickDetail(e, {id})}/></Table.Cell>
                 </Table.Row>
@@ -295,7 +323,7 @@ const UserListComponent = () => {
             <Input icon='search' actionPosition='right'  style={{marginLeft: "20px", marginTop:"10px"}} placeholder='검색 대상 ID 키워드 입력' value={searchKeword} onChange={onSearchChange}/>
             <Label as='a' />
 
-            <button style={{width:"50px", display:"block", marginRight:"20px", float:"right"}} onClick={(e) => DeleteUser(e)}>제거</button>
+            <button style={{width:"50px", display:"block", marginRight:"20px", float:"right"}} onClick={(e) => DeleteUser(e)}>삭제</button>
 
             <Table className="tableHead" sortable celled fixed unstackable>
                 <Table.Header>
@@ -306,6 +334,7 @@ const UserListComponent = () => {
                         <Table.HeaderCell sorted={status.column==='isSecurityAgent' ? status.direction : null} onClick={handleSort('isSecurityAgent')} style={{cursor:"pointer"}}>보안관리자 여부</Table.HeaderCell>
                         <Table.HeaderCell sorted={status.column==='role' ? status.direction : null} onClick={handleSort('role')} style={{cursor:"pointer"}}>권한</Table.HeaderCell>
                         <Table.HeaderCell sorted={status.column==='isOTP' ? status.direction : null} onClick={handleSort('isOTP')} style={{cursor:"pointer"}}>OTP 사용여부</Table.HeaderCell>
+                        <Table.HeaderCell >중복 로그인 허용 여부 </Table.HeaderCell>
                         <Table.HeaderCell >수정 </Table.HeaderCell>
                         <Table.HeaderCell >상세보기 </Table.HeaderCell>
                     </Table.Row>

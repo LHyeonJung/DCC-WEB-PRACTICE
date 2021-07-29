@@ -9,7 +9,7 @@ const ServerComponent = ({userId, ip, port}) => {
             <h4>
                 Server Component
             </h4>
-            <h5>
+            {/* <h5>
                 User Id: {userId}  
             </h5>
             <h5>
@@ -17,7 +17,7 @@ const ServerComponent = ({userId, ip, port}) => {
             </h5>
             <h5>
                 Port: {port}
-            </h5>
+            </h5> */}
         </div>
     );
 };

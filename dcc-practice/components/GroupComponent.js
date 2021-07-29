@@ -7,15 +7,15 @@ const GroupComponent = ({userId, ip}) => {
 
     return (
         <div>
-            <div>
-                Group
-            </div>
             <h4>
+                Group
+            </h4>
+            {/* <h4>
                 User Id: {userId}  
             </h4>
             <h4>
                 Ip: {ip}
-            </h4>
+            </h4> */}
         </div>
     );
 };
