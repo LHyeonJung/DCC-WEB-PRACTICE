@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import '../components/public/Modal.css';
 import wrapper from '../reducers/configureStore';
 import React, {useState, useEffect} from 'react';
 

@@ -5,8 +5,22 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { addUserAction } from '../reducers/user';
 import axios from 'axios';
 import { List } from 'immutable';
+import Modal from '../components/public/Modal.js';
+import { PopupContent } from 'semantic-ui-react';
 
 const EnrollUserComponent = () => {
+
+    const [ modalOpen, setModalOpen ] = useState(false);
+    const [ popupContents, setPopupContents ] = useState("");
+    const [ modalHeader, setModalHeader] = useState("");
+
+    const openModal = () => {
+        setModalOpen(true);
+    }
+    const closeModal = () => {
+        setModalOpen(false);
+    }
+
     const usertypes = [
         { title: '관리자' },
         { title: '일반 사용자'}
@@ -138,7 +152,11 @@ const EnrollUserComponent = () => {
         // 입력 데이터 초기화
         setUserInfoAll({...initialUserInfoAll}); 
         setPassCheckValue("");
-        alert("사용자 등록 완료");
+
+        setModalHeader("사용자 등록")
+        openModal();
+        setPopupContents("사용자 등록을 성공했습니다. [ID: "+userInfoAll.id+"]");
+        // alert("사용자 등록 완료");
     }, [userInfoAll]);
 
 
@@ -211,7 +229,9 @@ const EnrollUserComponent = () => {
                 </Grid>
             </Grid>
             <button style={{width:"50px", display:"block", marginLeft:"20px"}} onClick={onClickEnrollUser}>등록</button>
-            
+            <Modal open={ modalOpen } close={ closeModal } header={modalHeader}>
+                {popupContents}
+            </Modal>
         </div>
     );
 };
