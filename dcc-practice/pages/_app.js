@@ -1,5 +1,7 @@
 import '../styles/globals.css'
+import '../components/public/color.css';
 import '../components/public/Modal.css';
+import '../components/public/Pagination.css';
 import wrapper from '../reducers/configureStore';
 import React, {useState, useEffect} from 'react';
 

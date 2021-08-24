@@ -15,7 +15,7 @@ const UserList = () => {
                 <Grid item xs={12} sm={4}>
                     <SideTab/>
                 </Grid>
-                <Grid item xs={12} sm={8} style={{background: 'beige', color:'black'}}>
+                <Grid item xs={12} sm={8} style={{background: 'white', color:'black'}}>
                     <UserListComponent/>
                 </Grid>
             </Grid>

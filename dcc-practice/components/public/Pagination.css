@@ -1,0 +1,53 @@
+/* ======================================= 페이지 네비게이션 (라운드 직사각형) ======================================= */
+.roundrect_pagination
+{   /* 전체 감싸는 영역 */
+    text-align: center; 
+    margin: 2rem 0; /* [top,bottom: 2rem / left,right: 0] */
+}
+
+.roundrect_pagination .pagination 
+{   /* 전체 영역 */
+    display: inline-block; 
+    height: auto; 
+    padding: 0 1.5rem; 
+    border-radius: 3.5rem; 
+    background-color: var(--clr-light-cyan); 
+}
+
+.roundrect_pagination .page-numbers 
+{   /* 개별 번호 영역 */
+    display: block; 
+    padding: 0.5rem 0.8rem 0.3rem; 
+    float: left; 
+    color: var(--clr-text); 
+    font-size: 1.2rem; 
+    font-weight: 400; 
+    line-height: 1; 
+    transition: 0.3s ease; 
+}
+
+.roundrect_pagination .page-numbers:hover, .roundrect_pagination .page-numbers.current
+{   /* 마우스 오버 시 */
+    background-color: var(--clr-icon); 
+    color: var(--clr-white); 
+    cursor: pointer;
+} 
+
+/*-------------------------- 화살표 ----------------------------*/
+.icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-arrow-up  /* > 화살표 (기본) - &#xE001;  */
+{ 
+    display: inline-block; 
+    font-size: 0.7rem; 
+    font-weight: 500; 
+    padding: 0 0.5rem; 
+} 
+
+.icon-arrow-left 
+{   /*  
+    < 화살표 - 좌측 >
+    => 한 아이콘을 사용하여 좌,우 표시할땐 이렇게 회전시켜서 사용해도 되는데, 
+    현재는 별도의 아이콘으로 사용했으니 사용안함
+    */ 
+    /* transform: rotateY(180deg);  */
+}  
+    

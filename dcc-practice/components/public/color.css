@@ -1,0 +1,166 @@
+@charset "utf-8";
+
+/* CSS 에서 변수 사용가능 -- IE9+ 를 위한 css-vars-ponyfill 있음 */
+/* IE 폴리필 - https://jhildenbiddle.github.io/css-vars-ponyfill/  설명 사이트  */
+/* CDN :  <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>  */
+/* ----------------------  변수 선언  ------------------------- */
+:root {    /* root 가상 클래스에 변수를 선언한다. */
+
+    /* ------------- 컬러 : 총 22개   ----------------*/
+    
+    /* 메인 및 주요 색상: 8 */
+    --clr-primary: #1F2B41 !important;                         /* 값 or 강조 텍스트 */
+    --clr-text: rgba(31, 43, 65, 0.8) !important;              /* 기본 텍스트(레이블) 색상, primary 의 80%  */
+    /* --clr-light-cyan: #EBEFF2 !important;                      이전 배경 색상: Body 배경 색 or 어두운 배경의 텍스트색 */
+    --clr-light-cyan: #EEF2F5 !important;                      /* Body 배경 색 or 어두운 배경의 텍스트색 */
+    --clr-point: #4F5CB0 !important;                           /* 포인트 색 ( 정상, OK, 안전 ) */
+    --clr-icon: #6C757D !important;                            /* 아이콘 색 */
+    --clr-btn: #1F2B41 !important;                             /* 기본 버튼 배경 색 */
+    --clr-btn-outline: #FFFFFF !important;                     /* 아웃라인 버튼 배경 색 */
+    --clr-btn-text: #FFFFFF !important;                        /* 버튼 텍스트 색 */
+    
+    /* 제품별 색상 : 6 */
+    --clr-ba: #7986CB !important;                              /* Business Application : BA-SCP, BA-UND */
+    --clr-da: #B388FF !important;                              /* DBMS Application : DA */
+    --clr-dp: #4DB6AC !important;                              /* DBMS Package : DP-ORA, DP-MSQ */
+    --clr-de: #A1887F !important;                              /* DBMS Engine : DE-MYQ */
+    --clr-ke: #4FC3F7 !important;                              /* Kernal : KE-WIN, KE-LNX */
+    --clr-manual: #999999 !important;                          /* 수동 등록 */
+
+    /* 상태 색상 : 4 */
+    --clr-attention: #FF9800 !important;                       /* 주의 */
+    --clr-warning: #F05045 !important;                         /* 위험 */
+    --clr-warning-10: rgba(240, 80, 69, 0.1) !important;       /* 위험 투명도 10% */
+    --clr-warning-light: rgba(240, 80, 69, 0.1) !important;    /* 위험 투명도 0.1  */
+
+    /* 기타 색상 : 11 */
+    --clr-line: #CED4DA !important;                            /* 라인 */
+    --clr-border: #BBC0C6 !important;                          /* 테두리 */
+    --clr-shadow: rgba(0, 0, 0, 0.1) !important;               /* 그림자 (검정 0.1%) */
+    --clr-tooltip: rgba(59, 72, 80, 0.9) !important;           /* 툴팁 영역 배경 색상 */
+    --clr-hover-light: rgba(255, 255, 255, 0.8) !important;    /* 메뉴의 hover 밝은 배경 - 흰색의 10% */
+    --clr-hover: rgba(31, 43, 65, 0.1) !important;             /* hover & Select 배경 컬러 primary 의 10%  */
+    --clr-element: rgba(31, 43, 65, 0.07) !important;          /* 그룹패널 요소의 배경색(예, 암호화 적용 자산의 배경) / hover색 보다 더 투명 */
+    --clr-white: #FFFFFF !important;                           /* 흰색 */
+    --clr-black: #000000 !important;                           /* 검정색 */
+    --clr-disabled: #EEEEEE !important;                        /* 비활성 배경 색상 */
+    --clr-readonly: #F9F9F9 !important;                        /* Read Only 배경 색상 */
+
+    /* 헤더 배경 색상:  */
+    --clr-hd-grey: #CED4DA !important;                            /* 그레이 */
+    --clr-hd-sky: #D5E2F7 !important;                             /* 하늘색 */
+    --clr-hd-ivori: #F7E4D5 !important;                           /* 아이보리색 */
+    --clr-hd-pink: #F7D5DD !important;                            /* 핑크색 */
+    --clr-hd-purple: #DAD5F7 !important;                          /* 연보라색 */
+    --clr-hd-lightblue: #D5DCF7 !important;                       /* 라이트 블루색 */
+    --clr-hd-green: #D5F7E0 !important;                           /* 라이트 그린색 */
+
+    --clr-hd-black: #18191E !important;                           /* 블랙 - 다크테마 */
+    --clr-hd-deep-blue: #101A3A !important;                           /* 딥 블루 - 다크테마 */
+    --clr-hd-deep-purple: #22094C !important;                           /* 딥 퍼플 - 다크테마 */
+    
+}
+
+.dark-theme {    /* 다크 테마 색상 설정 값 */
+    /* ------------- 컬러 : 총 22개   ----------------*/
+    
+    /* 메인 및 주요 색상: 5 */
+    --clr-primary: #FFFFFF !important;                         /* 값 or 강조 텍스트 */
+    --clr-text: rgba(255, 255, 255, 0.7) !important;              /* 기본 텍스트(레이블) 색상, primary 의 80%  */
+    --clr-light-cyan: #2E323C !important;                      /* Body 배경 색 or 어두운 배경의 텍스트색 */
+    --clr-point: #6375EB !important;                           /* 포인트 색 ( 정상, OK, 안전 ) */
+    --clr-btn-outline: #DDDDDD !important;                     /* 아웃라인 버튼 배경 색 */
+
+    /* 기타 색상 : 11 */
+    --clr-line: #262831 !important;                            /* 라인 */
+    --clr-border: #6A6C6E !important;                          /* 테두리 */
+    --clr-shadow: rgba(0, 0, 0, 0.1) !important;               /* 그림자 (검정 0.1%) */
+    --clr-tooltip: rgba(238, 242, 245, 0.9) !important;           /* 툴팁 영역 배경 색상 */
+    --clr-hover-light: rgba(0, 0, 0, 0.8) !important;          /* 메뉴의 hover 밝은 배경 - 흰색의 10% */
+    --clr-element: rgba(68, 75, 87, 0.5) !important;          /* 그룹패널 요소의 배경색(예, 암호화 적용 자산의 배경) / hover색 보다 더 투명 */
+    --clr-white: #363A43 !important;                           /* 흰색 */
+    --clr-disabled: #494949 !important;                        /* 비활성 배경 색상 */
+    --clr-readonly: #444852 !important;                        /* Read Only 배경 색상 */
+  
+
+}
+
+/* ----------------------  컬러 설정  ------------------------- */
+
+.clr-primary { color: var(--clr-primary) !important; }                              /* 메인 or 값 텍스트 */
+.clr-bg-primary { background-color: var(--clr-primary) !important; } 
+
+.clr-text { color: var(--clr-text) !important; }                                    /* 기본 텍스트, 레이블 */
+.clr-bg-text { background-color: var(--clr-text) !important; }
+
+.clr-light-cyan { color: var(--clr-light-cyan) !important; }                        /* Body 배경 or 어두운 배경의 light 텍스트 */
+.clr-bg-light-cyan { background-color: var(--clr-light-cyan) !important; }
+
+.clr-point { color: var(--clr-point) !important; }                                  /* 포인트 색 */
+.clr-bg-point { background-color: var(--clr-point) !important; }
+
+.clr-icon { color: var(--clr-icon) !important; }                                    /* 아이콘 색 */
+.clr-bg-icon { background-color: var(--clr-icon) !important; } 
+
+
+.clr-ba { color: var(--clr-ba) !important; }                                       /* BA */
+.clr-bg-ba { background-color: var(--clr-ba) !important; }
+
+.clr-da { color: var(--clr-da) !important; }                                       /* DA */
+.clr-bg-da { background-color: var(--clr-da) !important; } 
+
+.clr-dp { color: var(--clr-dp) !important; }                                       /* DP */
+.clr-bg-dp { background-color: var(--clr-dp) !important; } 
+
+.clr-de { color: var(--clr-de) !important; }                                       /* DE */
+.clr-bg-de { background-color: var(--clr-de) !important; } 
+
+.clr-ke { color: var(--clr-ke) !important; }                                       /* KE */
+.clr-bg-ke { background-color: var(--clr-ke) !important; } 
+
+.clr-manual { color: var(--clr-manual) !important; }                               /* 수동 등록 */
+.clr-bg-manual { background-color: var(--clr-manual) !important; }
+
+
+.clr-attention { color: var(--clr-attention) !important; }                           /*  주의  */
+.clr-bg-attention { background-color: var(--clr-attention) !important; }
+
+.clr-warning { color: var(--clr-warning) !important; }                               /*  위험  */
+.clr-bg-warning { background-color: var(--clr-warning) !important; }   
+.clr-bg-warning-10 { background-color: var(--clr-warning-10) !important;  }          /* 위험 투명 10% - 적용 예) 제품 아이콘 라운드 배경 */
+
+.clr-warning-light { color: var(--clr-warning-light) !important; }                   /* 위험 투명도 0.1 배경 */
+.clr-bg-warning-light { background-color: var(--clr-warning-light) !important; }  
+
+
+.clr-line { color: var(--clr-line) !important; }                                     /*  라인  */
+.clr-bg-line { background-color: var(--clr-line) !important; }
+
+.clr-border { color: var(--clr-border) !important; }                                 /*  테두리  */
+.clr-bg-border { background-color: var(--clr-border) !important; }
+
+.clr-shadow { box-shadow: 0 0 1rem var(--clr-shadow) !important; }                   /*  그림자 (검정 0.1%)  */
+
+.clr-tooltip { color: var(--clr-tooltip) !important; }                               /*  툴팁 영역 배경 색상 */
+.clr-bg-tooltip { background-color: var(--clr-tooltip) !important; } 
+
+.clr-hover { color: var(--clr-hover) !important; }                                   /* hover & Select 배경 컬러 primary 의 10%  */
+.clr-bg-hover { background-color: var(--clr-hover) !important; }
+
+.clr-bg-hover-light { background-color: var(--clr-hover-light) !important; }                     /* hover & Select 배경 컬러 primary 의 10%  */
+
+.clr-element { color: var(--clr-element) !important; }                               /* 그룹패널 요소의 배경색(예, 암호화 적용 자산의 배경) / hover색 보다 더 투명 */
+.clr-bg-element { background-color: var(--clr-element) !important; }
+
+.clr-white { color: var(--clr-white) !important; }                                   /*  흰색  */
+.clr-bg-white { background-color: var(--clr-white) !important; } 
+
+.clr-black { color: var(--clr-white) !important; }                                   /*  검정  */
+.clr-bg-black { background-color: var(--clr-black) !important; }
+
+.clr-disabled { color: var(--clr-disabled) !important; }                                   /*  비활성화  */
+.clr-bg-disabled { background-color: var(--clr-disabled) !important; }
+
+.clr-readonly { color: var(--clr-readonly) !important; }                                   /*  Read Only  */
+.clr-bg-readonly { background-color: var(--clr-readonly) !important; }
+

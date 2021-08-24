@@ -1,5 +1,8 @@
 import React from 'react';
 
+// https://phrygia.github.io/2020-11-16/react-modal
+
+// 재사용 컴포넌트
 const Modal = ( props ) => {
     // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
     const { open, close, header } = props;

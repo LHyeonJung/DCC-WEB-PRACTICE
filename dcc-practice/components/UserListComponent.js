@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {initUserAction, addUserAction, removeUserAction} from '../reducers/user';
+import Pagination from '../components/public/Pagination';
 
 import {IoIosRefresh, IoMdRefresh} from "react-icons/io";
 import {BsFillChatSquareDotsFill, BsPencil} from "react-icons/bs";
@@ -10,7 +11,7 @@ import Header from '../components/public/Header';
 import { Grid } from "@material-ui/core";
 import SideTab from '../components/SideTab';
 
-import _ from 'lodash'; // // 모듈화, 성능 및 기타 기능을 제공하는 자바스크립트 유틸리티 라이브러리
+import _, { flatMap } from 'lodash'; // // 모듈화, 성능 및 기타 기능을 제공하는 자바스크립트 유틸리티 라이브러리
 import axios from 'axios';
 import {Label, Input, Table, Menu, Icon, Divider, StatisticValue} from 'semantic-ui-react';
 // import 'semantic-ui-css/semantic.min.css';
@@ -63,35 +64,18 @@ const UserListComponent = () => {
         }
     }, [resettingRef.current]);
 
-    // useEffect(() => {
-    //     console.log("isCheckedItems 변경");
-    //     // isCheckedItems.forEach(element => {
-    //     //     console.log("* "+ element.targetId + "/"+ element.isChecked);
-    //     // });
+    // pagenation을 사용하기 위함
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage, setPostsPerPage] = useState(10);
 
-    //     var userListTemp = [...status.assets];
-    //     // status.assets.info 데이터 예시:  {"user_info": {"list": ["{\"id\":\"USER3\",\"pass\":\"qhdks./\",\"isSuperUser\":\"false\",\"userName\":\"hyeonjung4\",\"isSecurityAgent\":\"false\",\"role\":null,\"isOTP\":\"false\",\"isignOTPShared\":\"false\",\"Explanation\":\"~~\",\"mail\":\"\",\"phone\":\"1234\",\"department\":\"\",\"rank\":\"\",\"isDuplicateLogin\":\"true\",\"serverGroupAccessibility\":\"\",\"menuAccessibility\":\"\",\"info\":\"\"}"]}}
-    //     userListTemp.forEach(element => {
-    //         var temp = JSON.parse(element.info);
-    //         for(var key in temp){
-    //             var user_info = temp[key];
-    //             for(var info in user_info){
-    //                 console.log("key: "+ info + "/ "+ user_info[info]);
-    //                 element.info = JSON.parse(user_info[info]);
-    //             }
-    //         }
-    //         // element.info = JSON.parse(element.info);
-    //     });
+    const indexOfLast = currentPage * postsPerPage;
+    const indexOfFirst = indexOfLast - postsPerPage;
+    function currentPosts(tmp) {
+      let currentPosts = 0;
+      currentPosts = tmp.slice(indexOfFirst, indexOfLast);
+      return currentPosts;
+    }
 
-    //     setStatus({
-    //         ...status,
-    //         filtered: userListTemp,
-    //         assets: userListTemp,
-    //     });
-        
-    //     //JSON.parse(jsonData);
-    // }, [status.assets]);
-    
     const _getUser = useCallback(async() => {
         const res = await axios.get('http://localhost:4000/get_user_table');
         // console.log(res.data)
@@ -284,7 +268,8 @@ const UserListComponent = () => {
          }
     }, [isCheckedItems, status]);
 
-    const userItems = status.filtered.slice(page * rowsPerPage, (page+1) * rowsPerPage).map(
+    // const userItems = status.filtered.slice(page * rowsPerPage, (page+1) * rowsPerPage).map(
+    const userItems = currentPosts(status.filtered).map(
         user => {
             const {id, pass, isSuperUser, isSecurityAgent, role, isOTP, isignOTPShared, info} = user;
             const checkedItemIndex = isCheckedItems.findIndex(x => x.targetId===id);
@@ -313,7 +298,7 @@ const UserListComponent = () => {
     )
 
     return (
-        <div>
+        <div style={{margin:'0 2rem'}}>
             <a className="componentTitle">사용자 조회</a>
             <a className="componentDesc">DCC에 등록된 사용자를 조회합니다.</a>
             <button onClick={(e) => onClickRefresh(e)} style={{ marginTop:"20px", marginRight:"20px", display: "inline-block", float:"right", cursor:"pointer"}}>
@@ -325,36 +310,39 @@ const UserListComponent = () => {
 
             <button style={{width:"50px", display:"block", marginRight:"20px", float:"right"}} onClick={(e) => DeleteUser(e)}>삭제</button>
 
-            <Table className="tableHead" sortable celled fixed unstackable>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell ><input name="headerCheckbox" type="checkbox" checked={isAllChecked} onChange={(e)=> onClickAllChecked(isAllChecked)}></input> </Table.HeaderCell>
-                        <Table.HeaderCell sorted={status.column==='id' ? status.direction : null} onClick={handleSort('id')} style={{cursor:"pointer"}} >ID</Table.HeaderCell>
-                        <Table.HeaderCell sorted={status.column==='isSuperUser' ? status.direction : null} onClick={handleSort('isSuperUser')} style={{cursor:"pointer"}}>관리자 여부</Table.HeaderCell>
-                        <Table.HeaderCell sorted={status.column==='isSecurityAgent' ? status.direction : null} onClick={handleSort('isSecurityAgent')} style={{cursor:"pointer"}}>보안관리자 여부</Table.HeaderCell>
-                        <Table.HeaderCell sorted={status.column==='role' ? status.direction : null} onClick={handleSort('role')} style={{cursor:"pointer"}}>권한</Table.HeaderCell>
-                        <Table.HeaderCell sorted={status.column==='isOTP' ? status.direction : null} onClick={handleSort('isOTP')} style={{cursor:"pointer"}}>OTP 사용여부</Table.HeaderCell>
-                        <Table.HeaderCell >중복 로그인 허용 여부 </Table.HeaderCell>
-                        <Table.HeaderCell >수정 </Table.HeaderCell>
-                        <Table.HeaderCell >상세보기 </Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
+            <div style={{textAlign:'center', margin:'2rem 0'}}>
+                <Table className="tableHead" sortable celled fixed unstackable>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell ><input name="headerCheckbox" type="checkbox" checked={isAllChecked} onChange={(e)=> onClickAllChecked(isAllChecked)}></input> </Table.HeaderCell>
+                            <Table.HeaderCell sorted={status.column==='id' ? status.direction : null} onClick={handleSort('id')} style={{cursor:"pointer"}} >ID</Table.HeaderCell>
+                            <Table.HeaderCell sorted={status.column==='isSuperUser' ? status.direction : null} onClick={handleSort('isSuperUser')} style={{cursor:"pointer"}}>관리자 여부</Table.HeaderCell>
+                            <Table.HeaderCell sorted={status.column==='isSecurityAgent' ? status.direction : null} onClick={handleSort('isSecurityAgent')} style={{cursor:"pointer"}}>보안관리자 여부</Table.HeaderCell>
+                            <Table.HeaderCell sorted={status.column==='role' ? status.direction : null} onClick={handleSort('role')} style={{cursor:"pointer"}}>권한</Table.HeaderCell>
+                            <Table.HeaderCell sorted={status.column==='isOTP' ? status.direction : null} onClick={handleSort('isOTP')} style={{cursor:"pointer"}}>OTP 사용여부</Table.HeaderCell>
+                            <Table.HeaderCell >중복 로그인 허용 여부 </Table.HeaderCell>
+                            <Table.HeaderCell >수정 </Table.HeaderCell>
+                            <Table.HeaderCell >상세보기 </Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
 
-                <Table.Body className="tableBody" styles={{'max-height':'85vh'}}>
-                    {/* { _.map( status.filtered.slice(status.sidx,status.maxRows),({id,isSuperUser,isSecurityAgent,role,isOTP})  =>
-                            <Table.Row key={id}>
-                                <Table.Cell>{id}</Table.Cell>
-                                <Table.Cell>{isSuperUser}</Table.Cell>
-                                <Table.Cell>{isSecurityAgent}</Table.Cell>
-                                <Table.Cell>{role}</Table.Cell>
-                                <Table.Cell>{isOTP}</Table.Cell>
-                            </Table.Row>
-                        )} */}
+                    <Table.Body className="tableBody" styles={{'max-height':'85vh'}}>
+                        {/* { _.map( status.filtered.slice(status.sidx,status.maxRows),({id,isSuperUser,isSecurityAgent,role,isOTP})  =>
+                                <Table.Row key={id}>
+                                    <Table.Cell>{id}</Table.Cell>
+                                    <Table.Cell>{isSuperUser}</Table.Cell>
+                                    <Table.Cell>{isSecurityAgent}</Table.Cell>
+                                    <Table.Cell>{role}</Table.Cell>
+                                    <Table.Cell>{isOTP}</Table.Cell>
+                                </Table.Row>
+                            )} */}
                         {userItems}
-                </Table.Body>
-            </Table>
+                    </Table.Body>
+                </Table>
+            </div>
             {/* <Pagination floated='right' defaultActivePage={curPage+1} totalPages={totalPage} onPageChange={this.handlePage} /> */}
 
+            <Pagination postsPerPage={postsPerPage} totalPosts={status.filtered.length} paginate={setCurrentPage} />
         </div>
     );
 }
